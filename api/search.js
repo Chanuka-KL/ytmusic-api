@@ -1,6 +1,5 @@
-// api/search.js
 import pkg from "ytmusic-api";
-const YTMusic = pkg.default ?? pkg; // <-- works whether pkg is the class or { default: class }
+const YTMusic = pkg.default ?? pkg; // works for CommonJS + ESM
 
 let ytmusic;
 
@@ -20,14 +19,16 @@ export default async function handler(req, res) {
     const yt = await getYT();
     const results = await yt.search(q);
 
+    // include SONG + VIDEO types
     const songs = results
-      .filter(r => r.type === "SONG")
-      .map(song => ({
-        id: song.videoId,
-        title: song.name,
-        artist: song.artist?.name,
-        duration: song.duration,
-        thumbnail: song.thumbnails?.[0]?.url
+      .filter(r => r.type === "SONG" || r.type === "VIDEO")
+      .map(item => ({
+        id: item.videoId,
+        title: item.name,
+        type: item.type,
+        artist: item.artist?.name,
+        duration: item.duration,
+        thumbnail: item.thumbnails?.[0]?.url
       }));
 
     res.status(200).json(songs);
