@@ -1,14 +1,23 @@
 import YTMusic from "ytmusic-api";
 
-const ytmusic = new YTMusic();
-await ytmusic.initialize();
+let ytmusic;
 
-export default async (req, res) => {
+// ensure we initialize only once (vercel reuses lambdas)
+async function getYT() {
+  if (!ytmusic) {
+    ytmusic = new YTMusic();
+    await ytmusic.initialize();
+  }
+  return ytmusic;
+}
+
+export default async function handler(req, res) {
   try {
     const { q } = req.query;
     if (!q) return res.status(400).json({ error: "Missing query ?q=" });
 
-    const results = await ytmusic.search(q);
+    const yt = await getYT();
+    const results = await yt.search(q);
 
     const songs = results
       .filter(r => r.type === "SONG")
@@ -24,4 +33,4 @@ export default async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}
