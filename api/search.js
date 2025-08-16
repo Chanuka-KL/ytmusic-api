@@ -1,5 +1,6 @@
+// api/search.js
 import pkg from "ytmusic-api";
-const { YTMusic } = pkg;
+const YTMusic = pkg.default ?? pkg; // <-- works whether pkg is the class or { default: class }
 
 let ytmusic;
 
@@ -31,6 +32,6 @@ export default async function handler(req, res) {
 
     res.status(200).json(songs);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err?.message ?? String(err) });
   }
 }
