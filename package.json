@@ -7,6 +7,6 @@
     "start": "node api/search.js"
   },
   "dependencies": {
-    "ytmusic-api": "^1.7.0"
+    "ytmusic-api": "^4.2.0"
   }
 }
