@@ -1,8 +1,8 @@
-import { YTMusic } from "ytmusic-api";
+import pkg from "ytmusic-api";
+const { YTMusic } = pkg;
 
 let ytmusic;
 
-// ensure only one init across lambda invocations
 async function getYT() {
   if (!ytmusic) {
     ytmusic = new YTMusic();
