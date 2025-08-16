@@ -1,8 +1,8 @@
-import YTMusic from "ytmusic-api";
+import { YTMusic } from "ytmusic-api";
 
 let ytmusic;
 
-// ensure we initialize only once (vercel reuses lambdas)
+// ensure only one init across lambda invocations
 async function getYT() {
   if (!ytmusic) {
     ytmusic = new YTMusic();
